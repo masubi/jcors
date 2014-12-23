@@ -1,0 +1,14 @@
+{
+  "name": "jcors",
+  "version": "0.0.1",
+  "description": "Proxy server that adds cors headers to response",
+  "main": "jcors.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "masubi",
+  "license": "ISC",
+  "devDependencies": {
+    "http-proxy": "^1.8.1"
+  }
+}
