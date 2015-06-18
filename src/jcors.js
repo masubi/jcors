@@ -24,7 +24,8 @@
                 }
             }
         }
-    }
+        return headers;
+    };
 
     // TODO:  add http protocol handling
     // parse the target from the original request
@@ -47,19 +48,22 @@
     //  proxy event handling
     //
     proxy.on('proxyRes', function(proxyRes, req, res, options){
-        console.log('RAW Response from the target', JSON.stringify(proxyRes.headers, true, 2));
+        console.log("Raw Request headers from origin: ", JSON.stringify(req.headers, true, 2));
+        console.log('RAW Response headers from the target', JSON.stringify(proxyRes.headers, true, 2));
         var resultHeaders=getHeaders(proxyRes);
         var cors_headers = {
             'access-control-allow-methods': 'HEAD, POST, GET, PUT, PATCH, DELETE',
             'access-control-max-age': '86400',
             'access-control-allow-headers': resultHeaders,
             'access-control-allow-credentials': 'true',
-            'access-control-allow-origin': req.headers.origin || '*'
+            'access-control-allow-origin': req.headers.origin || req.headers.Origin
         };
         for (key in cors_headers) {
-          value = cors_headers[key];
-          res.setHeader(key, value);
+            value = cors_headers[key];
+            res.setHeader(key, value);
+            proxyRes.headers[key]=value;
         }
+        console.log('Modified ProxiedResp from the target', JSON.stringify(proxyRes.headers, true, 2));
         console.log('Modified Response from the target', JSON.stringify(res._headers, true, 2));
     });
 
